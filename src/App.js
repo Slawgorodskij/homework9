@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import {Routes, Route} from 'react-router-dom'
+import ProfilePage from "./pages/ProfilePage";
+import Layout from "./layouts/Layout";
+import Page404 from "./pages/Page404";
+import MessagesPageContainer from "./pages/messagePage/MessgePageContainer";
+import HomePageContainer from "./pages/homePage/HomePageContainer";
+import RegisterPage from "./pages/authPage/RegisterPage";
+import LoginPage from "./pages/authPage/LoginPage";
+import {useSelector} from "react-redux";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const user = useSelector(state => state.user.currentUser);
+
+    return user ?
+        (<Routes>
+            <Route path={'/'} element={<Layout/>}>
+                <Route path={'/'} element={<HomePageContainer/>}/>
+                <Route path={'/login'} element={<LoginPage/>}/>
+                <Route path={'/register'} element={<RegisterPage/>}/>
+                <Route path={'/profile'} element={<ProfilePage/>}/>
+                <Route path={'/messages'} element={<MessagesPageContainer/>}/>
+                <Route path={'/messages/:chatId'} element={<MessagesPageContainer/>}/>
+                <Route path={'/noChat'} element={<Page404/>}/>
+                <Route path={'*'} element={<Page404/>}/>
+            </Route>
+        </Routes>)
+        :
+        (<Routes>
+                <Route path={'/'} element={<Layout/>}>
+                    <Route path={'/'} element={<HomePageContainer/>}/>
+                    <Route path={'/register'} element={<RegisterPage/>}/>
+                    <Route path={'/login'} element={<LoginPage/>}/>
+                    <Route path={'*'} element={<LoginPage/>}/>
+                </Route>
+            </Routes>
+
+        )
+        ;
 }
 
 export default App;
